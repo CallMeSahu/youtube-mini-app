@@ -8,13 +8,13 @@
 </head>
 
 <body>
-    <h1>
+    <h1 id="video-title">
         <%= video.snippet.title %>
     </h1>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= video.id %>" frameborder="0"></iframe>
 
     <h2>Change Video Title</h2>
-    <form action="/video/title" method="POST">
+    <form id="title-form" action="/video/title" method="POST">
         <input type="text" id="new-title" name="newTitle" required>
         <button type="submit">Update Title</button>
     </form>
@@ -40,6 +40,31 @@
             <% }) %>
     </ul>
 
+    <script>
+        let currentTitle = "<%= video.snippet.title %>";
+
+        document.getElementById("title-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+            let newTitle = document.getElementById("new-title").value;
+
+            if (newTitle.trim() !== "") {
+                document.getElementById("video-title").textContent = newTitle;
+                currentTitle = newTitle;
+
+                fetch("/video/title", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `newTitle=${encodeURIComponent(newTitle)}`
+                }).then(response => {
+                    console.log("Title updated successfully!");
+                }).catch(error => {
+                    console.error("Error updating title:", error);
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
