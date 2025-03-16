@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Mini-App</title>
+</head>
+
+<body>
+    <h1>
+        <%= video.snippet.title %>
+    </h1>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= video.id %>" frameborder="0"></iframe>
+
+    <h2>Change Video Title</h2>
+    <form action="/video/title" method="POST">
+        <input type="text" id="new-title" name="newTitle" required>
+        <button type="submit">Update Title</button>
+    </form>
+
+    <h2>Comments</h2>
+    <form action="/comment" method="POST">
+        <input type="text" name="username" placeholder="Your name" required>
+        <textarea name="text" placeholder="Write a comment..." required></textarea>
+        <button type="submit">Add Comment</button>
+    </form>
+
+    <ul>
+        <% comments.forEach(comment=> { %>
+            <li>
+                <strong>
+                    <%= comment.username %>:
+                </strong>
+                <%= comment.text %>
+                    <form action="/comment/<%= comment._id %>?_method=DELETE" method="POST">
+                        <button type="submit">Delete</button>
+                    </form>
+            </li>
+            <% }) %>
+    </ul>
+
+</body>
+
+</html>
