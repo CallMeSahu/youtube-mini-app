@@ -7,7 +7,7 @@ const methodOverride = require('method-override');
 const videoRoutes = require('./routes/videoRoutes');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected'))
