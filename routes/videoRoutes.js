@@ -27,4 +27,29 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.post('/comment', async (req, res) => {
+    const { username, text } = req.body;
+    try {
+        const newComment = new Comment({ videoId: VIDEO_ID, username, text });
+        await newComment.save();
+
+        await new Log({ action: 'Add Comment', details: `${username} commented: ${text}` }).save();
+        res.redirect('/');
+    } catch (error) {
+        res.status(500).send('Error adding comment');
+    }
+});
+
+router.delete('/comment/:id', async (req, res) => {
+    try {
+        const comment = await Comment.findById(req.params.id);
+        await Comment.findByIdAndDelete(req.params.id);
+
+        await new Log({ action: 'Delete Comment', details: `Comment by ${comment.username} deleted` }).save();
+        res.redirect('/');
+    } catch (error) {
+        res.status(500).send('Error deleting comment');
+    }
+});
+
 module.exports = router;
