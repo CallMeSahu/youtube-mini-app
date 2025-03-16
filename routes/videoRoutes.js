@@ -52,4 +52,14 @@ router.delete('/comment/:id', async (req, res) => {
     }
 });
 
+router.post('/video/title', async (req, res) => {
+    const { newTitle } = req.body;
+    try {
+        await new Log({ action: 'Update Title', details: `Title changed to: ${newTitle}` }).save();
+        res.redirect('/');
+    } catch (error) {
+        res.status(500).send('Error updating title');
+    }
+});
+
 module.exports = router;
